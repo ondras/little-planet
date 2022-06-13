@@ -67,9 +67,6 @@ function createContext(canvas) {
 	program.uniform.texLeft.set(0);
 	program.uniform.texRight.set(1);
 
-	program.uniform.pano_hfov.set(DEFAULT_PANO_HFOV * RAD);
-	program.uniform.planet_fov.set(DEFAULT_PLANET_FOV * RAD);
-
 	return { gl, program };
 }
 
@@ -85,7 +82,7 @@ export default class LittlePlanet extends HTMLElement {
 	#originalCamera = null;
 	#mode = "planet";
 
-	constructor(options = {}) {
+	constructor() {
 		super();
 
 		const canvas = document.createElement("canvas");
@@ -93,26 +90,31 @@ export default class LittlePlanet extends HTMLElement {
 
 		this.program = program;
 		this.gl = gl;
-		this.inert = false;
-
-		this.append(canvas);
-
-//		this.addEventListener("pointerdown", e => this.#transition());
+//		this.inert = false;
 
 		this.addEventListener("pointerdown", e => this.#onPointerDown(e));
 		this.addEventListener("pointerup", e => this.#onPointerUp(e));
 		this.addEventListener("pointermove", e => this.#onPointerMove(e));
 		this.addEventListener("wheel", e => this.#onWheel(e));
 
+	}
+
+	connectedCallback() {
+		const { canvas } = this;
+
+		this.append(canvas);
+
+		let options = { // init from attributes
+			width: Number(this.getAttribute("width")) || canvas.width,
+			height: Number(this.getAttribute("height")) || canvas.height
+		}
 		if (this.hasAttribute("mode")) { options.mode = this.getAttribute("mode"); }
 		if (this.hasAttribute("src")) { options.src = this.getAttribute("src"); }
-		if (this.hasAttribute("inert")) { options.inert = this.getAttribute("inert"); }
-		options.width = Number(this.getAttribute("width")) || canvas.width;
-		options.height = Number(this.getAttribute("height")) || canvas.height;
 
 		Object.assign(this, options);
 	}
 
+	get inert() { return this.hasAttribute("inert"); }
 	get canvas() { return this.gl.canvas; }
 	get planetSize() { return this.#image ? 2*this.#image.naturalHeight : null; }
 
@@ -127,8 +129,37 @@ export default class LittlePlanet extends HTMLElement {
 	get mode() { return this.#mode; }
 	set mode(mode) {
 		this.#mode = (mode == "pano" ? "pano" : "planet");
-		this.program.uniform.planet_pano_mix = (this.#mode == "planet" ? 1 : 0);
 		this.#changed();
+	}
+
+	get width() { return this.canvas.width; }
+	set width(width) {
+		this.canvas.width = width;
+		this.#syncSize();
+	}
+
+	get height() { return this.canvas.height; }
+	set height(height) {
+		this.canvas.height = height;
+		this.#syncSize();
+	}
+
+	get src() { return this.#image.src; }
+	set src(src) {
+		this.#load(src);
+	}
+
+	async #load(src) {
+		this.#image = null;
+
+		try {
+			this.#image = await loadImage(src);
+			createTextures(this.#image, this.gl);
+			this.#render();
+			this.dispatchEvent(new CustomEvent("load"));
+		} catch (e) {
+			this.dispatchEvent(new CustomEvent("error", {detail:e}));
+		}
 	}
 
 	#onPointerDown(e) {
@@ -252,49 +283,27 @@ export default class LittlePlanet extends HTMLElement {
 	#render(forceUniforms = {}) {
 		const { gl, program } = this;
 
+		let planet_pano_mix, rotation;
+		if (this.#mode == "planet") {
+			planet_pano_mix = 0;
+			rotation = [0, 0];
+		} else {
+			planet_pano_mix = 1;
+			rotation = [this.#camera.lon*RAD, (90+this.#camera.lat)*RAD];
+		}
+
 		let uniforms = {
+			planet_pano_mix,
+			rotation,
 			pano_hfov: this.#camera.hfov * RAD,
-			rotation: [this.#camera.lon*RAD, (90+this.#camera.lat)*RAD]
+			planet_fov: DEFAULT_PLANET_FOV * RAD
 		}
 		Object.assign(uniforms, forceUniforms);
 
-		for (let name in uniforms) {
-			program.uniform[name] && program.uniform[name].set(uniforms[name]);
-		}
-
+		for (let name in uniforms) { program.uniform[name].set(uniforms[name]); }
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
 		this.#dirty = false;
-	}
-
-	get width() { return this.canvas.width; }
-	set width(width) {
-		this.canvas.width = width;
-		this.#syncSize();
-	}
-
-	get height() { return this.canvas.height; }
-	set height(height) {
-		this.canvas.height = height;
-		this.#syncSize();
-	}
-
-	get src() { return this.#image.src; }
-	set src(src) {
-		this.#load(src);
-	}
-
-	async #load(src) {
-		this.#image = null;
-
-		try {
-			this.#image = await loadImage(src);
-			createTextures(this.#image, this.gl);
-			this.#render();
-			this.dispatchEvent(new CustomEvent("load"));
-		} catch (e) {
-			this.dispatchEvent(new CustomEvent("error", {detail:e}));
-		}
 	}
 }
 

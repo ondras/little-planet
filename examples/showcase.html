@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+
+		<script type="module" src="../little-planet.js?6"></script>
+		<link rel="stylesheet" href="../little-planet.css?1" />
+
+		<link rel="stylesheet" href="examples.css" />
+	</head>
+	<body>
+		<h1>Little Planet Showcase</h1>
+
+		<figure>
+			<little-planet src="../img/sanatorium.jpg" width="400" height="300"></little-planet>
+			<figcaption>
+				<code>&lt;little-planet width="400" height="300"&gt;&lt;/little-planet&gt;</code>
+				<br/>
+				Default usage, interactive, starting with the planet view
+			</figcaption>
+		</figure>
+
+		<figure>
+			<little-planet src="../img/sanatorium.jpg" width="400" height="300" mode="pano" style="cursor:grab"></little-planet>
+			<figcaption>
+				<code>&lt;little-planet width="400" height="300"&gt;&lt;/little-planet&gt;</code>
+				<br/>
+				Starting in the panorama view.
+			</figcaption>
+		</figure>
+
+		<figure>
+			<little-planet src="../img/sanatorium.jpg" width="300" height="300" inert></little-planet>
+			<figcaption>
+				<code>&lt;little-planet width="300" height="300" inert&gt;&lt;/little-planet&gt;</code>
+				<br/>
+				Not interactive (inert), square aspect ratio
+			</figcaption>
+		</figure>
+
+		<footer>
+			&copy; 2022 <a href="https://ondras.zarovi.cz/">Ondřej Žára</a> | <a href="https://github.com/ondras/little-planet">GitHub</a>
+		</footer>
+
+		<script>alert(devicePixelRatio)</script>
+	</body>
+</html>
+
