@@ -1,0 +1,74 @@
+cartesian jsou (x, y, z) body v prostoru
+
+spherical jsou (r, theta, phi)
+  theta je zpravidla od severniho polu 0..pi, tzv. "colatitude" nebo inclination/zenith
+  phi je -pi,pi (longitude, azimuth)
+  theta/phi jsou prohozene matematika vs. fyzika
+
+
+
+cartesian to spherical:
+  r = euklidovska vzdalenost
+  theta = acos(z / r) = atan( sqrt(x*x+y*y) / z )
+  phi = atan(y / x)
+
+
+spherical to cartesian:
+  x = r * cos(phi) * sin(theta)
+  y = r * sin(phi) * sin(theta)
+  z = r            * cos(theta)
+
+
+
+
+
+
+stereograficka projekce:
+  projektuje body na kouli do bodu na plose
+  kartezske souradnice X, Y
+  nebo polarni R, PHI
+
+  dopredna:
+    v polarnich:
+      R = sin(theta) / (1 - cos(theta)) = cot(theta/2)
+      PHI = phi (azimut)
+
+    v kartezskych:
+      X = x/(1-z)
+      Y = y/(1-z)
+
+  inverze:
+    v polarnich:
+      phi = PHI
+      theta = 2 * atan(1 / R)
+
+    v kartezskych:
+      x = 2X/(X*X+Y*Y+1)
+      y = 2Y/(X*X+Y*Y+1)
+      z = (X*X+Y*Y-1)/(X*X+Y*Y+1)
+
+    v shaderu:
+      longitude = atan(y / x)
+      latitude = atan(dist)
+
+
+    pro R>0 plati: atan(1/R) = pi/2 - atan(R)
+
+
+ortograficka projekce:
+  - zahodi se z
+  - pripadne jeste scale/translate do daneho viewportu
+
+
+perspektivni projekce:
+  fov = 2 * atan(1/dist)
+  dist = 1 / tan(fov/2)
+
+  tan(fov/2) = ymax/dist
+
+
+souradne systemy:
+  FragCoord: vlevo dole 0,0; vpravo nahore width/height
+  NDC: vlevo dole -1,-1; vpravo nahore 1;1
+  kartezske souradnice: x roste doprava, y roste nahoru, z roste od pozorovatele
+  sfericke souradnice: theta (colatitude, inclination, zenith) roste dolu (severni pol = 0, jizni pol = pi); phi (zemepisna delka) roste po smeru hodinovych rucicek, 0 je pro x = 0
