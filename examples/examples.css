@@ -1,9 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,500;1,500&family=Quicksand&display=swap');
+
 * {
 	box-sizing: border-box;
 }
 
 body {
-	font-family: sans-serif;
+	font-family: barlow, sans-serif;
+
+}
+
+main {
+	max-width: 800px;
+	margin: 0 auto;
 }
 
 footer {
@@ -12,3 +20,4 @@ footer {
 	font-size: 75%;
 	border-top: 1px solid gray;
 }
+

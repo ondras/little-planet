@@ -10,39 +10,57 @@
 		<link rel="stylesheet" href="examples.css" />
 	</head>
 	<body>
-		<h1>Little Planet Showcase</h1>
+		<main>
+			<h1>Little Planet Showcase</h1>
 
-		<figure>
-			<little-planet src="img/sanatorium.jpg" width="800" height="600"></little-planet>
-			<figcaption>
-				<br/>
-				Default usage, interactive, starting with the planet view
-			</figcaption>
-		</figure>
+			<figure>
+				<little-planet src="img/sanatorium.jpg" width="1000" height="750"></little-planet>
+				<figcaption>
+					<em>Sanatorium, Vráž u Písku</em>
+					<br/>
+					This is the default usage, interactive, starting with the planet view. Try clicking/touching the image!
+				</figcaption>
+			</figure>
 
-		<figure>
-			<little-planet src="img/sanatorium.jpg" width="800" height="600" mode="pano"></little-planet>
-			<figcaption>
-				<br/>
-				Starting in the panorama view.
-			</figcaption>
-		</figure>
+			<figure>
+				<little-planet src="img/seznam.jpg" width="1000" height="750" mode="pano"></little-planet>
+				<figcaption>
+					<em>Rooftop view, Seznam.cz, Praha</em>
+					<br/>
+					Starting with the panoramic view. Mouse and touch supported, including pinch-to-zoom.
+				</figcaption>
+			</figure>
 
-		<figure>
-			<little-planet src="img/sanatorium.jpg" width="600" height="600" inert></little-planet>
-			<figcaption>
-				<br/>
-				Not interactive (inert), square aspect ratio
-			</figcaption>
-		</figure>
+			<figure>
+				<little-planet src="img/okor.jpg" width="1000" height="1000" inert></little-planet>
+				<figcaption>
+					<em>Okoř Castle</em>
+					<br/>
+					Not interactive (via the HTML inert attribute), square aspect ratio
+				</figcaption>
+			</figure>
 
-		<figure>
-			<little-planet id="full" src="img/sanatorium.jpg" width="600" height="600" mode="pano"></little-planet>
-			<figcaption>
-				<br/>
-				<button onclick="document.querySelector('#full').requestFullscreen()">Fullscreen</button>
-			</figcaption>
-		</figure>
+			<figure id="anim">
+				<little-planet id="full" src="img/sanatorium.jpg" width="1000" height="750" mode="pano"></little-planet>
+				<figcaption>
+					<em>FIXME</em>
+					<br/>
+					<label><input type="checkbox" />click to animate</label>
+					<script type="module">
+						let figure = document.querySelector("#anim");
+						let input = figure.querySelector("input");
+						let scene = figure.querySelector("little-planet");
+						setInterval(() => {
+							if (!input.checked) { return; }
+							scene.camera = {
+								lon: (performance.now()/100) % 360,
+								lat: Math.sin(performance.now()/1000) * 10
+							}
+						}, 1000/60);
+					</script>
+				</figcaption>
+			</figure>
+		</main>
 
 		<footer>
 			&copy; 2022 <a href="https://ondras.zarovi.cz/">Ondřej Žára</a> | <a href="https://github.com/ondras/little-planet">GitHub</a>
