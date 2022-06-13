@@ -114,9 +114,11 @@ export default class LittlePlanet extends HTMLElement {
 		Object.assign(this, options);
 	}
 
-	get inert() { return this.hasAttribute("inert"); }
 	get canvas() { return this.gl.canvas; }
 	get planetSize() { return this.#image ? 2*this.#image.naturalHeight : null; }
+
+	get inert() { return this.hasAttribute("inert"); }
+	set inert(inert) { this.toggleAttribute("inert", inert); }
 
 	get camera() { return this.#camera; }
 	set camera(camera) {

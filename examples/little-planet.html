@@ -3,118 +3,55 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
+
 		<script type="module" src="../little-planet.js"></script>
 		<link rel="stylesheet" href="../little-planet.css" />
 
+		<link rel="stylesheet" href="examples.css" />
 <style>
 
-section {
-	counter-increment: section;
+h2 {
 	border-top: 1px solid gray;
 	margin-top: 1em;
-}
-
-section h2 {
 	margin-bottom: 0;
 }
 
-section h2::before {
-	content: counter(section) ". ";
-}
-
-#source {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-}
-
-#source img {
+img {
 	max-width: 100%;
-	max-height: 50vh;
+	max-height: 30vh;
 	margin-top: 0.5em;
-}
-
-form {
-	display: flex;
-	flex-direction: column;
-}
-
-label {
-	margin-top: 0.5em;
+	display: block;
 }
 
 @media (orientation: portrait) {
-	#target little-planet {
-		max-width: 100%;
-	}
+	little-planet { max-width: 100%; }
 }
 
 @media (orientation: landscape) {
-	#target little-planet {
-		max-width: 80vh;
-	}
+	little-planet { max-width: 80vh; }
 }
 
 		</style>
 	</head>
 	<body>
-		<h1>Polar Panorama Creator</h1>
-		<section id="source">
-			<h2>Choose an image</h2>
-			<p>In equirectangular projection, max width 8192, max height 4096, optimal aspect ratio 2:1</p>
-			<input type="file" accept="image/*" />
-			<img alt="Source image preview" />
-		</section>
-		<section id="options">
-			<h2>Make optional adjustments</h2>
-			<form>
-				<label>
-					Altitude:
-					<select name="altitude">
-						<option value="1">1</option>
-						<option value="1.273">4/pi</option>
-						<option value="1.5">1.5</option>
-					</select>
-				</label>
-			</form>
-		</section>
-		<section id="target">
-			<h2>Result</h2>
-			<p>Right-click to save the full-resolution image</p>
-			<input name="hfov" type="range" min="2" max="180" value="120" />
-			<input name="lon" type="range" min="-180" max="180" value="0" />
-			<input name="lat" type="range" min="-90" max="90" value="0" />
-			<little-planet></little-planet>
-			<little-planet src="img/sanatorium.jpg"></little-planet>
-		</section>
+		<h1>Little Planet (Polar Panorama) Creator</h1>
+
+		<h2>Choose an image</h2>
+		<p>In equirectangular projection, max width 8192, max height 4096, optimal aspect ratio 2:1</p>
+		<input type="file" accept="image/*" />
+		<img alt="Source image preview" />
+
+		<h2>Result</h2>
+		<p>Right-click to save the full-resolution image</p>
+		<little-planet></little-planet>
 
 		<footer>
 			&copy; 2022 <a href="https://ondras.zarovi.cz/">Ondřej Žára</a> | <a href="https://github.com/ondras/little-planet">GitHub</a>
 		</footer>
 
-
 		<script>
-const file = document.querySelector("[type=file]");
-const source = document.querySelector("#source img");
-const scene = document.querySelector("#target little-planet");
-const form = document.querySelector("#options form");
-
-function updateCamera() {
-	let camera = {
-		hfov: target.querySelector("[name=hfov]").valueAsNumber,
-		lon: target.querySelector("[name=lon]").valueAsNumber,
-		lat: target.querySelector("[name=lat]").valueAsNumber
-	};
-	scene.camera = camera;
-}
-
-function pair(selector, callback) {
-	let node = form.querySelector(selector);
-	node.addEventListener("change", e => callback(e.target));
-	callback(node);
-}
-
-//pair("[name=altitude]", input => scene.altitude = Number(input.value));
+const source = document.querySelector("img");
+const scene = document.querySelector("little-planet");
 
 source.addEventListener("load", async e => {
 	await customElements.whenDefined("little-planet");
@@ -123,20 +60,16 @@ source.addEventListener("load", async e => {
 
 scene.addEventListener("load", e => {
 	let scene = e.target;
-//	scene.width = scene.height = scene.planetSize/4;
-	scene.width = scene.planetSize/4;
-	scene.height = scene.width * 1;
+	scene.width = scene.height = scene.planetSize;
 });
 
-[...target.querySelectorAll("input")].forEach(i => i.addEventListener("input", updateCamera));
-
-file.addEventListener("change", e => {
+document.querySelector("[type=file]").addEventListener("change", e => {
 	let f = e.target.files[0];
 	if (!f) { return; }
 	source.src = URL.createObjectURL(f);
-})
+});
 
-source.src = "../img/sample.jpg"; // demo
+source.src = "img/seznam.jpg"; // demo
 //source.src = "sanatorium.jpg"; // demo
 //source.src = "world-graticule.png"; // demo
 

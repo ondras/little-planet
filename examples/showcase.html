@@ -13,7 +13,7 @@
 		<h1>Little Planet Showcase</h1>
 
 		<figure>
-			<little-planet src="img/sanatorium.jpg" width="400" height="300"></little-planet>
+			<little-planet src="img/sanatorium.jpg" width="800" height="600"></little-planet>
 			<figcaption>
 				<br/>
 				Default usage, interactive, starting with the planet view
@@ -21,7 +21,7 @@
 		</figure>
 
 		<figure>
-			<little-planet src="img/sanatorium.jpg" width="400" height="300" mode="pano"></little-planet>
+			<little-planet src="img/sanatorium.jpg" width="800" height="600" mode="pano"></little-planet>
 			<figcaption>
 				<br/>
 				Starting in the panorama view.
@@ -29,10 +29,18 @@
 		</figure>
 
 		<figure>
-			<little-planet src="img/sanatorium.jpg" width="300" height="300" inert></little-planet>
+			<little-planet src="img/sanatorium.jpg" width="600" height="600" inert></little-planet>
 			<figcaption>
 				<br/>
 				Not interactive (inert), square aspect ratio
+			</figcaption>
+		</figure>
+
+		<figure>
+			<little-planet id="full" src="img/sanatorium.jpg" width="600" height="600" mode="pano"></little-planet>
+			<figcaption>
+				<br/>
+				<button onclick="document.querySelector('#full').requestFullscreen()">Fullscreen</button>
 			</figcaption>
 		</figure>
 
