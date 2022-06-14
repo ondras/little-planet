@@ -46,6 +46,7 @@ function createTextures(img, gl) {
 function loadImage(src) {
 	return new Promise((resolve, reject) => {
 		let image = new Image();
+		image.crossOrigin = "anonymous";
 		image.src = src;
 		image.onload = e => resolve(e.target);
 		image.onerror = reject;
