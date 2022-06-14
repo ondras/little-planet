@@ -11,9 +11,12 @@
 <style>
 
 h2 {
-	border-top: 1px solid gray;
 	margin-top: 1em;
 	margin-bottom: 0;
+}
+
+h2 + p {
+	margin-top: 4px;
 }
 
 img {
@@ -22,28 +25,25 @@ img {
 	margin-top: 0.5em;
 	display: block;
 }
-
-@media (orientation: portrait) {
-	little-planet { max-width: 100%; }
-}
-
-@media (orientation: landscape) {
-	little-planet { max-width: 80vh; }
-}
-
 		</style>
 	</head>
 	<body>
-		<h1>Little Planet (Polar Panorama) Creator</h1>
+		<header>
+			<h1>Little Planet (Polar Panorama) Creator</h1>
+			<p>This document is a part of the <code>&lt;little-planet&gt;</code> project. Learn about it, see more examples and study the docs <a href="https://github.com/ondras/little-planet">at the official README</a>.</p>
+		</header>
 
-		<h2>Choose an image</h2>
-		<p>In equirectangular projection, max width 8192, max height 4096, optimal aspect ratio 2:1</p>
-		<input type="file" accept="image/*" />
-		<img alt="Source image preview" />
+		<main>
+			<h2>Choose an image</h2>
+			<p>In equirectangular projection, max width 8192, max height 4096, optimal aspect ratio 2:1</p>
+			<input type="file" accept="image/*" />
+			<img alt="Source image preview" title="Source image preview" />
 
-		<h2>Result</h2>
-		<p>Right-click to save the full-resolution image</p>
-		<little-planet></little-planet>
+			<h2>Result</h2>
+			<p>Right-click to save the full-resolution image</p>
+			<little-planet inert></little-planet>
+
+		</main>
 
 		<footer>
 			&copy; 2022 <a href="https://ondras.zarovi.cz/">Ondřej Žára</a> | <a href="https://github.com/ondras/little-planet">GitHub</a>
