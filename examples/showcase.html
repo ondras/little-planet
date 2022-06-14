@@ -8,58 +8,89 @@
 		<link rel="stylesheet" href="../little-planet.css?1" />
 
 		<link rel="stylesheet" href="examples.css" />
+		<style>
+body {
+	font-size: 112.5%;
+	margin: 0 1em;
+}
+
+figure {
+	position: relative;
+	margin: 2em 0 0 0;
+	line-height: 1;
+}
+
+figcaption {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	font-style: italic;
+	color: #fff;
+	background-image: linear-gradient(to top, #000, rgba(0, 0, 0, 0));
+	padding: 8px 4px;
+}
+
+figure + p {
+	margin-top: 4px;
+}
+
+label {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+}
+
+[type=checkbox] {
+	margin: 0 4px 0 0;
+}
+</style>
 	</head>
 	<body>
-		<main>
+		<header>
 			<h1>Little Planet Showcase</h1>
+			<p>This page is a part of the <code>&lt;little-planet&gt;</code> project. Learn about it, see more examples and study the docs <a href="https://github.com/ondras/little-planet">at the official README</a>.</p>
+		</header>
+
+		<main>
+			<p>The goal of this page is to demonstrate most of the functionality available for the Little Planet element. Feel free to study <a href="https://github.com/ondras/little-planet/blob/main/examples/showcase.html">its source code</a>. Note that most examples are interactive and are thus blocking page scrolling; to scroll the page, use the empty area on the sides.</p>
 
 			<figure>
-				<little-planet src="img/sanatorium.jpg" width="1000" height="750"></little-planet>
-				<figcaption>
-					<em>Sanatorium, Vráž u Písku</em>
-					<br/>
-					This is the default usage, interactive, starting with the planet view. Try clicking/touching the image!
-				</figcaption>
+				<little-planet src="img/okor.jpg" width="1000" height="750"></little-planet>
+				<figcaption>Okoř Castle</figcaption>
 			</figure>
+			<p>This is the default usage, interactive, starting with the planet view. Try clicking/touching the image!</p>
 
 			<figure>
 				<little-planet src="img/seznam.jpg" width="1000" height="750" mode="pano"></little-planet>
-				<figcaption>
-					<em>Rooftop view, Seznam.cz, Praha</em>
-					<br/>
-					Starting with the panoramic view. Mouse and touch supported, including pinch-to-zoom.
-				</figcaption>
+				<figcaption>Rooftop view, Seznam.cz, Praha</figcaption>
 			</figure>
+			<p>Starting with the panoramic view. Mouse and touch supported, including pinch-to-zoom.</p>
 
 			<figure>
-				<little-planet src="img/okor.jpg" width="1000" height="1000" inert></little-planet>
-				<figcaption>
-					<em>Okoř Castle</em>
-					<br/>
-					Not interactive (via the HTML inert attribute), square aspect ratio
-				</figcaption>
+				<little-planet src="img/sanatorium-vraz.jpg" width="1000" height="1000" inert></little-planet>
+				<figcaption>Sanatorium, Vráž u Písku</figcaption>
 			</figure>
+			<p>Not interactive (via the <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/inert">inert attribute</a>), square aspect ratio</p>
 
 			<figure id="anim">
-				<little-planet id="full" src="img/sanatorium.jpg" width="1000" height="750" mode="pano"></little-planet>
-				<figcaption>
-					<em>FIXME</em>
-					<br/>
-					<label><input type="checkbox" />click to animate</label>
-					<script type="module">
-						let figure = document.querySelector("#anim");
-						let input = figure.querySelector("input");
-						let scene = figure.querySelector("little-planet");
-						setInterval(() => {
-							if (!input.checked) { return; }
-							scene.camera = {
-								lon: (performance.now()/100) % 360,
-								lat: Math.sin(performance.now()/1000) * 10
-							}
-						}, 1000/60);
-					</script>
-				</figcaption>
+				<little-planet class="anim" src="img/cargo-gallery-night.jpg" width="1000" height="750" mode="pano"></little-planet>
+				<figcaption>Cargo Gallery, Vltava, Praha</figcaption>
 			</figure>
+			<p>
+				<label><input class="anim" type="checkbox" />animation via a simple JS API (can be zoomed independently)</label>
+				<script type="module">
+					let input = document.querySelector("input.anim");
+					let scene = document.querySelector("little-planet.anim");
+					setInterval(() => {
+						if (!input.checked) { return; }
+						scene.camera = {
+							lon: (performance.now()/100) % 360,
+							lat: Math.sin(performance.now()/1000) * 10
+						}
+					}, 1000/60);
+				</script>
+			</p>
 		</main>
 
 		<footer>
