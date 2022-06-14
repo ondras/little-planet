@@ -25,8 +25,9 @@ body > * {
 }
 
 footer {
-	margin-top: 0.67em;
-	padding-top: 0.67em;
-	font-size: 75%;
+	width: 100%;
+	margin-top: 1em;
+	padding: 1em 0;
+	font-size: 87.5%;
 	border-top: 1px solid gray;
 }

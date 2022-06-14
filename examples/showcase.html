@@ -49,7 +49,7 @@ label {
 	<body>
 		<header>
 			<h1>Little Planet Showcase</h1>
-			<p>This page is a part of the <code>&lt;little-planet&gt;</code> project. Learn about it, see more examples and study the docs <a href="https://github.com/ondras/little-planet">at the official README</a>.</p>
+			<p>This document is a part of the <code>&lt;little-planet&gt;</code> project. Learn about it, see more examples and study the docs <a href="https://github.com/ondras/little-planet">at the official README</a>.</p>
 		</header>
 
 		<main>
@@ -71,7 +71,7 @@ label {
 				<little-planet src="img/sanatorium-vraz.jpg" width="1000" height="1000" inert></little-planet>
 				<figcaption>Sanatorium, Vráž u Písku</figcaption>
 			</figure>
-			<p>Not interactive (via the <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/inert">inert attribute</a>), square aspect ratio</p>
+			<p>Non-interactive image (via the <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/inert">inert attribute</a>), square aspect ratio.</p>
 
 			<figure id="anim">
 				<little-planet class="anim" src="img/cargo-gallery-night.jpg" width="1000" height="750" mode="pano"></little-planet>
@@ -79,7 +79,7 @@ label {
 			</figure>
 			<p>
 				<label><input class="anim" type="checkbox" />animation via a simple JS API (can be zoomed independently)</label>
-				<script type="module">
+				<script>
 					let input = document.querySelector("input.anim");
 					let scene = document.querySelector("little-planet.anim");
 					setInterval(() => {
@@ -91,6 +91,21 @@ label {
 					}, 1000/60);
 				</script>
 			</p>
+
+			<figure>
+				<little-planet class="full" src="img/kaminek.jpg" width="1200" height="600"></little-planet>
+				<figcaption>Kamínek, Zlatníky-Hodkovice</figcaption>
+			</figure>
+			<p>
+				It is possible to specify any aspect ratio; the resulting field-of-view will respect it.
+				You can force the fullscreen display by <button class="full">clicking here</button>, but note that the browser will deform the image to fit the screen.
+				<script>
+					document.querySelector("button.full").addEventListener("click", _ => {
+						document.querySelector("little-planet.full").requestFullscreen();
+					});
+				</script>
+			</p>
+
 		</main>
 
 		<footer>
