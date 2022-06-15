@@ -2,52 +2,10 @@
 ---
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
+	{% include_relative _head.html title="Little Planet Showcase" %}
 
-		<script type="module" src="../little-planet.js?6"></script>
-		<link rel="stylesheet" href="../little-planet.css?1" />
-
-		<link rel="stylesheet" href="examples.css" />
-		<style>
-figure {
-	position: relative;
-	margin: 2em 0 0 0;
-	line-height: 1;
-}
-
-figcaption {
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	font-style: italic;
-	color: #fff;
-	background-image: linear-gradient(to top, #000, rgba(0, 0, 0, 0));
-	padding: 8px 4px;
-}
-
-figure + p {
-	margin-top: 4px;
-}
-
-label {
-	display: flex;
-	align-items: center;
-	cursor: pointer;
-}
-
-[type=checkbox] {
-	margin: 0 4px 0 0;
-}
-</style>
-	</head>
 	<body>
-		<header>
-			<h1>Little Planet Showcase</h1>
-			<p>This document is a part of the <code>&lt;little-planet&gt;</code> project. Learn about it, see more examples and study the docs <a href="https://github.com/ondras/little-planet">at the official README</a>.</p>
-		</header>
+		{% include_relative _header.html h1="Little Planet Showcase" %}
 
 		<main>
 			<p>The goal of this page is to demonstrate most of the functionality available for the Little Planet element. Feel free to study <a href="https://github.com/ondras/little-planet/blob/main/examples/showcase.html">its source code</a>. Note that most examples are interactive and are thus blocking page scrolling; to scroll the page, use the empty area on the sides.</p>
@@ -105,11 +63,40 @@ label {
 
 		</main>
 
-		{% include footer.html %}
+		{% include_relative _footer.html %}
 
-		<footer>
-			&copy; 2022 <a href="https://ondras.zarovi.cz/">Ondřej Žára</a> | <a href="https://github.com/ondras/little-planet">GitHub</a>
-		</footer>
+<style>
+figure {
+	position: relative;
+	margin: 2em 0 0 0;
+	line-height: 1;
+}
+
+figcaption {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	font-style: italic;
+	color: #fff;
+	background-image: linear-gradient(to top, #000, rgba(0, 0, 0, 0));
+	padding: 8px 4px;
+}
+
+figure + p {
+	margin-top: 4px;
+}
+
+label {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+}
+
+[type=checkbox] {
+	margin: 0 4px 0 0;
+}
+</style>
 	</body>
 </html>
 

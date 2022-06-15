@@ -1,37 +1,10 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
+	{% include_relative _head.html title="Little Planet Creator" %}
 
-		<script type="module" src="../little-planet.js"></script>
-		<link rel="stylesheet" href="../little-planet.css" />
-
-		<link rel="stylesheet" href="examples.css" />
-<style>
-
-h2 {
-	margin-top: 1em;
-	margin-bottom: 0;
-}
-
-h2 + p {
-	margin-top: 4px;
-}
-
-img {
-	max-width: 100%;
-	max-height: 30vh;
-	margin-top: 0.5em;
-	display: block;
-}
-		</style>
-	</head>
 	<body>
-		<header>
-			<h1>Little Planet (Polar Panorama) Creator</h1>
-			<p>This document is a part of the <code>&lt;little-planet&gt;</code> project. Learn about it, see more examples and study the docs <a href="https://github.com/ondras/little-planet">at the official README</a>.</p>
-		</header>
+
+		{% include_relative _header.html h1="Little Planet (Polar Panorama) Creator" %}
 
 		<main>
 			<h2>Choose an image</h2>
@@ -45,11 +18,28 @@ img {
 
 		</main>
 
-		<footer>
-			&copy; 2022 <a href="https://ondras.zarovi.cz/">Ondřej Žára</a> | <a href="https://github.com/ondras/little-planet">GitHub</a>
-		</footer>
+		{% include_relative _footer.html %}
 
-		<script>
+<style>
+
+	h2 {
+		margin-top: 1em;
+		margin-bottom: 0;
+	}
+
+	h2 + p {
+		margin-top: 4px;
+	}
+
+	img {
+		max-width: 100%;
+		max-height: 30vh;
+		margin-top: 0.5em;
+		display: block;
+	}
+</style>
+
+<script>
 const source = document.querySelector("img");
 const scene = document.querySelector("little-planet");
 
