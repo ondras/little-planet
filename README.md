@@ -2,7 +2,7 @@
 
 This project is a Custom HTML Element (AKA Web Component) that renders an interactive view of a panoramic photo. Can be used with no JavaScript knowledge: just include the component and continue with plain HTML.
 
-[See how it works](FIXME) or jump straight into the [Documentation]()
+[See it in action](FIXME) or jump straight into the [Documentation]()
 
 ## Features
 
