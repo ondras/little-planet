@@ -12,6 +12,7 @@ This project is a Custom HTML Element (AKA Web Component) that renders an intera
     - uses the *impostor sphere* technique, ray-tracing the scene in fragment shader
   - Two views: top-level planet-like (not interactive) and a regular interactive inside-the-sphere
   - Smooth transition
+  - Controllable via mouse or touch, mobile friendly
   - Needs only one (equirectangular) image, size up to 8192×4096 pixels
 
 ## Read more
