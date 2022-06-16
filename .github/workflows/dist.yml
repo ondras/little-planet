@@ -20,4 +20,4 @@ jobs:
       - name: Store artifacts
         uses: actions/upload-artifact@v3
         with:
-          path: *.tgz
+          path: "*.tgz"
