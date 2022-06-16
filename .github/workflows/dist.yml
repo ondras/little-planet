@@ -15,5 +15,9 @@ jobs:
         run: npm i -g esbuild
       - name: Bundle
         run: mkdir -p dist; esbuild --bundle little-planet.js > dist/little-planet.js
+      - name: Package
+        run: npm pack
       - name: Store artifacts
         uses: actions/upload-artifact@v3
+        with:
+          path: *.tgz
