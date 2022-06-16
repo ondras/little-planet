@@ -1,7 +1,5 @@
 {
 	"name": "little-planet",
-	"browser": "little-planet.js",
-	"dependencies": {
-		"esbuild": "^0.14.44"
-	}
+	"version": "0.0.1",
+	"browser": "dist/little-planet.js"
 }
