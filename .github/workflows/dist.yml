@@ -6,6 +6,8 @@ jobs:
     steps:
     - uses: actions/checkout
     - uses: actions/setup-node
+      with:
+        registry-url: 'https://npm.pkg.github.com'
     - run: npm i -g esbuild
     - run: esbuild --bundle little-planet.js > dist/little-planet.js
 
