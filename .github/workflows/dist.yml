@@ -10,5 +10,5 @@ jobs:
       with:
         registry-url: 'https://npm.pkg.github.com'
     - run: npm i -g esbuild
-    - run: esbuild --bundle little-planet.js > dist/little-planet.js
+    - run: mkdir -p dist; esbuild --bundle little-planet.js > dist/little-planet.js
 
