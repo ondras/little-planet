@@ -2,7 +2,7 @@
 
 This project is a Custom HTML Element (AKA Web Component) that renders an interactive view of a panoramic photo. Can be used with no JavaScript knowledge: just include the component and continue with plain HTML.
 
-[See it in action](FIXME) or jump straight into the [Documentation]()
+[See it in action](https://ondras.github.io/little-planet/showcase.html) or jump straight into the [Documentation](wiki)
 
 ## Features
 
@@ -16,3 +16,13 @@ This project is a Custom HTML Element (AKA Web Component) that renders an intera
   - Needs only one (equirectangular) image, size up to 8192×4096 pixels
 
 ## Read more
+
+  - [Showcase of most features](https://ondras.github.io/little-planet/showcase.html)
+  - [Little Planet Creator](https://ondras.github.io/little-planet/little-planet.html)
+  - [Sizes & Resolutions](https://ondras.github.io/little-planet/sizes-resolutions.html)
+
+## Miscellaneous
+
+  - [Author](https://ondras.zarovi.cz/)
+  - [Sponsor page](https://github.com/sponsors/ondras)
+  - 
