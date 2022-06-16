@@ -71,7 +71,7 @@ function createContext(canvas) {
 	return { gl, program };
 }
 
-export default class LittlePlanet extends HTMLElement {
+export class LittlePlanet extends HTMLElement {
 	#dirty = false;
 	#image = null;
 	#camera = {
