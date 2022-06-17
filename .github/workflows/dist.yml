@@ -22,7 +22,8 @@ jobs:
       - name: Bundle
         run: mkdir -p dist; esbuild --format=esm --bundle little-planet.js > dist/little-planet.js
 
-      - uses: actions/upload-artifact@v3
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
         with:
           name: package
           path: "*.tgz"
