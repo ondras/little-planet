@@ -22,7 +22,13 @@ jobs:
       - name: Bundle
         run: mkdir -p dist; esbuild --format=esm --bundle little-planet.js > dist/little-planet.js
 
-      - name: Publish
+      - uses: actions/upload-artifact@v3
+        with:
+          name: package
+          path: "*.tgz"
+
+        - name: Publish
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

