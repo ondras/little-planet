@@ -34,16 +34,16 @@
 			</figure>
 			<p>
 				<label><input class="anim" type="checkbox" />animation via a simple JS API (can be zoomed independently)</label>
-				<script>
-					let input = document.querySelector("input.anim");
-					let scene = document.querySelector("little-planet.anim");
-					setInterval(() => {
-						if (!input.checked) { return; }
-						scene.camera = {
-							lon: (performance.now()/100) % 360,
-							lat: Math.sin(performance.now()/1000) * 10
-						}
-					}, 1000/60);
+				<script type="module">
+let input = document.querySelector("input.anim");
+let scene = document.querySelector("little-planet.anim");
+setInterval(() => {
+	if (!input.checked) { return; }
+	scene.camera = {
+		lon: (performance.now()/100) % 360,
+		lat: Math.sin(performance.now()/1000) * 10
+	}
+}, 1000/60);
 				</script>
 			</p>
 
@@ -53,14 +53,25 @@
 			</figure>
 			<p>
 				It is possible to specify any aspect ratio; the resulting field-of-view will respect it.
-				You can force the fullscreen display by <button class="full">clicking here</button>, but note that the browser will deform the image to fit the screen.
-				<script>
-					document.querySelector("button.full").addEventListener("click", _ => {
-						document.querySelector("little-planet.full").requestFullscreen();
-					});
+				The HTML Fullscreen API can be used to display an element in fullscreen; <button class="full">click this button</button> to do so. This will require you to handle the aspect ratio change, as the element gets stretched accordinly. There is a <a href="sizes-resolutions.html">dedicated page</a> with instructions regarding sizing and resolution.
+				<script type="module">
+let scene = document.querySelector("little-planet.full");
+function sync() {
+	if (document.fullscreenElement == scene) {
+		scene.width = scene.clientWidth;
+		scene.height = scene.clientHeight;
+	} else {
+		scene.width = 1200;
+		scene.height = 700;
+	}
+}
+sync();
+scene.addEventListener("fullscreenchange", sync);
+document.querySelector("button.full").addEventListener("click", _ => {
+	document.querySelector("little-planet.full").requestFullscreen();
+});
 				</script>
 			</p>
-
 		</main>
 
 		{% include_relative _footer.html %}
