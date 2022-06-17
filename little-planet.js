@@ -9,6 +9,19 @@ const LAT_RANGE = [-90, 90];
 const DEFAULT_PANO_HFOV = (HFOV_RANGE[0]+HFOV_RANGE[1])/2;
 const DEFAULT_PLANET_FOV = 240;
 
+const STYLE = `
+little-planet {
+	display: inline-block;
+	touch-action: none;
+}
+
+little-planet canvas {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+`;
+
 
 function pointerDistance(p1, p2) {
 	let dx = p2.x-p1.x;
@@ -309,5 +322,9 @@ export class LittlePlanet extends HTMLElement {
 		this.#dirty = false;
 	}
 }
+
+let style = document.createElement("style");
+style.append(STYLE);
+document.head.append(style);
 
 customElements.define("little-planet", LittlePlanet);
