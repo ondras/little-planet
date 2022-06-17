@@ -1,6 +1,10 @@
 {
 	"name": "@ondras/little-planet",
-	"version": "0.0.1",
+	"version": "0.0.2",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ondras/little-planet.git"
+	},
 	"browser": "dist/little-planet.js",
-	"files": ["test"]
+	"files": []
 }
