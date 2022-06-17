@@ -21,7 +21,8 @@ jobs:
 
       - name: Bundle
         run: mkdir -p dist; esbuild --format=esm --bundle little-planet.js > dist/little-planet.js
-        run: cp /home/runner/work/_temp/.npmrc test
+
+      - run: cp /home/runner/work/_temp/.npmrc test
 
       - name: Pack
         run: npm pack
