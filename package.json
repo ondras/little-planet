@@ -1,5 +1,5 @@
 {
-	"name": "little-planet",
+	"name": "@ondras/little-planet",
 	"version": "0.0.1",
 	"browser": "dist/little-planet.js",
 	"files": ["test"]
