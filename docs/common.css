@@ -34,3 +34,24 @@ footer {
 	border-top: 1px solid gray;
 	text-align: center;
 }
+
+figure {
+	position: relative;
+	margin: 2em 0 0 0;
+}
+
+figure little-planet {
+	display: block;
+}
+
+figcaption {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	font-style: italic;
+	color: #fff;
+	background-image: linear-gradient(-15deg, #000, rgba(0, 0, 0, 0));
+	padding: 8px;
+	text-align: right;
+}
