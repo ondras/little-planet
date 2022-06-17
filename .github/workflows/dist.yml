@@ -1,5 +1,5 @@
-on: workflow_dispatch
 name: Bundle & publish
+on: workflow_dispatch
 
 jobs:
   build:
@@ -7,18 +7,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Node.js
         uses: actions/setup-node@v3
         with:
           registry-url: 'https://npm.pkg.github.com'
+
       - name: Install esbuild
         run: npm i -g esbuild
+
       - name: Bundle
         run: mkdir -p dist; esbuild --format=esm --bundle little-planet.js > dist/little-planet.js
-      - name: Package
-        run: npm pack
-      - name: Store artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: package
-          path: "*.tgz"
+
+      - name: Publish
+        run: npm publish
