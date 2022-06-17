@@ -22,6 +22,9 @@ jobs:
       - name: Bundle
         run: mkdir -p dist; esbuild --format=esm --bundle little-planet.js > dist/little-planet.js
 
+      - name: Pack
+        run: npm pack
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
