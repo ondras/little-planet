@@ -15,6 +15,17 @@
 
 			<p>The panorama might be displayed in different size, though &ndash; the <strong>layout</strong> size that is set via CSS. Based on your design needs, you can apply different styles based on media queries or relative units (percentages, viewport-relative units). The CSS sizing is optional (if you do not apply any CSS, the element will be displayed using the rendering size), but desirable in certain situation (see below). If you decide to use CSS sizing, take care to always use size that is <em>smaller or equal</em> to the rendering size. The browser will have to upscale the canvas otherwise, which will look bad.</p>
 
+			<p>The following two panoramas have the same source image and the same layout size, but very different rendering sizes:</p>
+			<figure>
+				<little-planet src="img/jezirka.jpg" width="1600" height="800"></little-planet>
+				<figcaption>Large render size, downscaled to layout size (good)</figcaption>
+			</figure>
+
+			<figure>
+				<little-planet src="img/jezirka.jpg" width="300" height="150"></little-planet>
+				<figcaption>Very small render size, upscaled to layout size (bad)</figcaption>
+			</figure>
+
 			<h2>Maximum rendering size</h2>
 
 			<p>While you can specify any rendering size (that your browser and/or video card is willing to accept), it only makes sense to pick values that can be reasonably covered with pixels from the source image. This means that the maximum <em>good-looking</em> rendering size is proportional to the size of that image. There is no exact equation (because it also depends on aspect ratios and zoom inside of the view), but it is generally pointless to use rendering sizes larger than half of the source image.</p>
@@ -29,8 +40,7 @@
 
 			<p>The amount of physical pixels per one logical pixel is available via the <code>devicePixelRatio</code> global variable. It is therefore sufficient to multiply the rendering size with this constant (or divide the logical size) to make the panorama look sharp even on high-resolution displays:</p>
 
-<pre><code>
-let scene = document.querySelector("little-planet")
+<pre><code>let scene = document.querySelector("little-planet")
 let layoutWidth = 900
 let layoutHeight = 600
 
@@ -47,8 +57,7 @@ scene.style.height = `${layoutHeight}px`
 
 			<p>The following code shows how to use the <code>clienWidth</code> and <code>clientHeight</code> properties to detect the stretched size and update rendering accordingly. Note that the <code>devicePixelRatio</code> issue matters, so you might need to update the code accordingly.</p>
 
-<pre><code>
-let scene = document.querySelector("little-planet")
+<pre><code>let scene = document.querySelector("little-planet")
 scene.addEventListener("fullscreenchange", e => {
 	if (document.fullscreenElement == scene) {
 		scene.width = scene.clientWidth
