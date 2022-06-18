@@ -1,6 +1,6 @@
 # &lt;little-planet&gt;
 
-This project is a Custom HTML Element (AKA Web Component) that renders an interactive view of a panoramic photo. Can be used with no JavaScript knowledge: just include the component and continue with plain HTML.
+This project is a [Custom HTML Element](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements) (AKA [Web Component](https://developer.mozilla.org/en-US/docs/Web/Web_Components)) that renders an interactive view of a panoramic photo. Can be used with no JavaScript knowledge: just include the component and continue with plain HTML.
 
 [See it in action](https://ondras.github.io/little-planet/showcase.html) or jump straight into the [Documentation](https://github.com/ondras/little-planet/wiki)
 
@@ -25,4 +25,3 @@ This project is a Custom HTML Element (AKA Web Component) that renders an intera
 
   - [Author](https://ondras.zarovi.cz/)
   - [Sponsor me!](https://github.com/sponsors/ondras)
-  - 
