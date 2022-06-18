@@ -23,6 +23,24 @@
 
 			<h2>Hi-DPI (Retina) displays</h2>
 
+			<p>Certain displays offer a very high <em>physical</em> resolution, but use a different/smaller <em>logical</em> resolution in order to maintain reasonable text visibility. For instance, many Apple devices use a <em>double</em> physical resolution: if you specify a font size of 18px (logical), the text will be rendered at 36 physical pixels.</p>
+
+			<p>This behavior is somewhat problematic with respect to raster data (such as bitmap images or <code>&lt;canvas&gt;</code> elements), as the browser has to stretch the image twice (or more) to fit the physical resolution. Fortunately, we can use the rendering/layout size trick to our advantage.</p>
+
+			<p>The amount of physical pixels per one logical pixel is available via the <code>devicePixelRatio</code> global variable. It is therefore sufficient to multiply the rendering size with this constant (or divide the logical size) to make the panorama look sharp even on high-resolution displays:</p>
+
+<pre><code>
+let scene = document.querySelector("little-planet")
+let layoutWidth = 900
+let layoutHeight = 600
+
+scene.width = layoutWidth * devicePixelRatio
+scene.height = layoutHeight * devicePixelRatio
+scene.style.width = `${layoutWidth}px`
+scene.style.height = `${layoutHeight}px`
+</code></pre>
+
+
 			<h2>Fullscreen</h2>
 
 			<p>If you wish to display an element (this applies to all HTML elements, not just &lt;little-planet&gt;) in full-screen, you can use the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullscreen">Fullscreen API</a>. Calling the <code>requestFullscreen()</code> method will stretch a particular element across the whole display. This is bad, because the scene will change its aspect ratio (to a value that is probably different from the rendering aspect ratio). If you want your Little Planet to look nice even in full-screen, make sure to update its rendering size to the screen aspect ratio.</p>
