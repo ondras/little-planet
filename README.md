@@ -25,3 +25,4 @@ This project is a [Custom HTML Element](https://developer.mozilla.org/en-US/docs
 
   - [Author](https://ondras.zarovi.cz/)
   - [Sponsor me!](https://github.com/sponsors/ondras)
+  - [NPM package](https://www.npmjs.com/package/little-planet)
