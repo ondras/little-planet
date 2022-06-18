@@ -1,0 +1,51 @@
+---
+---
+<!doctype html>
+<html>
+	{% include_relative _head.html title="Sizes & Resolutions" %}
+
+	<body>
+
+		{% include_relative _header.html h1="Sizes & Resolutions" %}
+
+		<main>
+			<h2>Rendering and layout size</h2>
+
+			<p>When using the <code>&lt;little-planet&gt;</code> element, you need to specify its size using the <code>width</code> and <code>height</code> attributes (or the corresponding JS properties). This is the <strong>rendering</strong> size; it directly corresponds to the size of the underlying <code>&lt;canvas&gt;</code> element.</p>
+
+			<p>The panorama might be displayed in different size, though &ndash; the <strong>layout</strong> size that is set via CSS. Based on your design needs, you can apply different styles based on media queries or relative units (percentages, viewport-relative units). The CSS sizing is optional (if you do not apply any CSS, the element will be displayed using the rendering size), but desirable in certain situation (see below). If you decide to use CSS sizing, take care to always use size that is <em>smaller or equal</em> to the rendering size. The browser will have to upscale the canvas otherwise, which will look bad.</p>
+
+			<h2>Maximum rendering size</h2>
+
+			<p>While you can specify any rendering size (that your browser and/or video card is willing to accept), it only makes sense to pick values that can be reasonably covered with pixels from the source image. This means that the maximum <em>good-looking</em> rendering size is proportional to the size of that image. There is no exact equation (because it also depends on aspect ratios and zoom inside of the view), but it is generally pointless to use rendering sizes larger than half of the source image.</p>
+
+			<p>The information above holds for the <em>Panorama</em> view. The rules for the <em>Little Planet</em> view are a bit different, though. First, you ideally want a square aspect ratio (1:1), because the view resembles a centered sphere. Second, the maximum theoretical size of such square is <strong>twice the height of the source image</strong>. You do not need to remember this yourself, because the <code>&lt;little-planet&gt;</code> element will compute the value and provide it via the <code>planetSize</code> (readonly) property.</p>
+
+			<h2>Hi-DPI (Retina) displays</h2>
+
+			<h2>Fullscreen</h2>
+
+			<p>If you wish to display an element (this applies to all HTML elements, not just &lt;little-planet&gt;) in full-screen, you can use the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullscreen">Fullscreen API</a>. Calling the <code>requestFullscreen()</code> method will stretch a particular element across the whole display. This is bad, because the scene will change its aspect ratio (to a value that is probably different from the rendering aspect ratio). If you want your Little Planet to look nice even in full-screen, make sure to update its rendering size to the screen aspect ratio.</p>
+
+			<p>The following code shows how to use the <code>clienWidth</code> and <code>clientHeight</code> properties to detect the stretched size and update rendering accordingly. Note that the <code>devicePixelRatio</code> issue matters, so you might need to update the code accordingly.</p>
+
+<pre><code>
+let scene = document.querySelector("little-planet")
+scene.addEventListener("fullscreenchange", e => {
+	if (document.fullscreenElement == scene) {
+		scene.width = scene.clientWidth
+		scene.height = scene.clientHeight
+	} else {
+		// non-fullscreen/default values
+		scene.width = 1200
+		scene.height = 900
+	}
+})
+</code></pre>
+		</main>
+
+		{% include_relative _footer.html %}
+
+	</body>
+</html>
+
