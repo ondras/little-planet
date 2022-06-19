@@ -22,7 +22,6 @@ little-planet canvas {
 }
 `;
 
-
 function pointerDistance(p1, p2) {
 	let dx = p2.x-p1.x;
 	let dy = p2.y-p1.y;
@@ -104,13 +103,11 @@ export class LittlePlanet extends HTMLElement {
 
 		this.program = program;
 		this.gl = gl;
-//		this.inert = false;
 
 		this.addEventListener("pointerdown", e => this.#onPointerDown(e));
 		this.addEventListener("pointerup", e => this.#onPointerUp(e));
 		this.addEventListener("pointermove", e => this.#onPointerMove(e));
 		this.addEventListener("wheel", e => this.#onWheel(e));
-
 	}
 
 	connectedCallback() {
@@ -233,7 +230,7 @@ export class LittlePlanet extends HTMLElement {
 
 	#onWheel(e) {
 		if (this.#mode == "planet" || this.inert || !this.#image) { return; }
-
+		console.log(e.deltaY, e.deltaMode);
 		e.preventDefault();
 		let fovDelta = e.deltaY * 0.05;
 		this.camera = { hfov: this.#camera.hfov + fovDelta };
