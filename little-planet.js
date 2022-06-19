@@ -22,66 +22,6 @@ little-planet canvas {
 }
 `;
 
-function pointerDistance(p1, p2) {
-	let dx = p2.x-p1.x;
-	let dy = p2.y-p1.y;
-	return Math.sqrt(dx**2, dy**2);
-}
-
-function createTexture(src, gl) {
-	let texture = gl.createTexture();
-	gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, src);
-//	gl.generateMipmap(gl.TEXTURE_2D);
-	return texture;
-}
-
-function createTextures(img, gl) {
-	let tmp = document.createElement("canvas");
-	tmp.width = img.naturalWidth/2;
-	tmp.height = img.naturalHeight;
-	let ctx = tmp.getContext("2d");
-
-	ctx.drawImage(img, 0, 0);
-	gl.activeTexture(gl.TEXTURE0);
-	createTexture(tmp, gl);
-
-	ctx.drawImage(img, -tmp.width, 0);
-	gl.activeTexture(gl.TEXTURE1);
-	createTexture(tmp, gl);
-}
-
-function loadImage(src) {
-	return new Promise((resolve, reject) => {
-		let image = new Image();
-		image.crossOrigin = "anonymous";
-		image.src = src;
-		image.onload = e => resolve(e.target);
-		image.onerror = reject;
-	});
-}
-
-function createContext(canvas) {
-	const gl = canvas.getContext("webgl2", {preserveDrawingBuffer: true}); // to allow canvas save-as
-
-	let program = new Program(gl, {vs, fs});
-	program.use();
-
-	Object.values(program.attribute).forEach(a => a.enable());
-	let buffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-	gl.bufferData(gl.ARRAY_BUFFER, QUAD, gl.STATIC_DRAW);
-	program.attribute.position.pointer(2, gl.FLOAT, false, 0, 0);
-
-	program.uniform.texLeft.set(0);
-	program.uniform.texRight.set(1);
-
-	return { gl, program };
-}
 
 export class LittlePlanet extends HTMLElement {
 	#dirty = false;
@@ -241,30 +181,12 @@ export class LittlePlanet extends HTMLElement {
 		this.inert = true;
 
 		const duration = 2000;
-		const descendStop = 0.9;
-		const rotateStart = 0.6;
 		let startTime = performance.now();
 
 		let step = () => {
 			let time = performance.now();
 			let phase = (time-startTime) / duration;
-
-			let uniforms = {};
-
-			if (phase < descendStop) {
-				let frac = phase / descendStop;
-				uniforms.planet_pano_mix = frac;
-			} else {
-				uniforms.planet_pano_mix = 1;
-			}
-
-			if (phase < rotateStart) {
-				uniforms.rotation = [0, 0];
-			} else {
-				let frac = (phase-rotateStart)/(1-rotateStart);
-				frac = frac*frac;
-				uniforms.rotation = [0, frac*90*RAD];
-			}
+			let uniforms = computeTransitionUniforms(phase);
 
 			this.#render(uniforms);
 			if (phase < 1) {
@@ -318,6 +240,91 @@ export class LittlePlanet extends HTMLElement {
 
 		this.#dirty = false;
 	}
+}
+
+function pointerDistance(p1, p2) {
+	let dx = p2.x-p1.x;
+	let dy = p2.y-p1.y;
+	return Math.sqrt(dx**2, dy**2);
+}
+
+function createTexture(src, gl) {
+	let texture = gl.createTexture();
+	gl.bindTexture(gl.TEXTURE_2D, texture);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, src);
+//	gl.generateMipmap(gl.TEXTURE_2D);
+	return texture;
+}
+
+function createTextures(img, gl) {
+	let tmp = document.createElement("canvas");
+	tmp.width = img.naturalWidth/2;
+	tmp.height = img.naturalHeight;
+	let ctx = tmp.getContext("2d");
+
+	ctx.drawImage(img, 0, 0);
+	gl.activeTexture(gl.TEXTURE0);
+	createTexture(tmp, gl);
+
+	ctx.drawImage(img, -tmp.width, 0);
+	gl.activeTexture(gl.TEXTURE1);
+	createTexture(tmp, gl);
+}
+
+function loadImage(src) {
+	return new Promise((resolve, reject) => {
+		let image = new Image();
+		image.crossOrigin = "anonymous";
+		image.src = src;
+		image.onload = e => resolve(e.target);
+		image.onerror = reject;
+	});
+}
+
+function createContext(canvas) {
+	const gl = canvas.getContext("webgl2", {preserveDrawingBuffer: true}); // to allow canvas save-as
+
+	let program = new Program(gl, {vs, fs});
+	program.use();
+
+	Object.values(program.attribute).forEach(a => a.enable());
+	let buffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+	gl.bufferData(gl.ARRAY_BUFFER, QUAD, gl.STATIC_DRAW);
+	program.attribute.position.pointer(2, gl.FLOAT, false, 0, 0);
+
+	program.uniform.texLeft.set(0);
+	program.uniform.texRight.set(1);
+
+	return { gl, program };
+}
+
+function computeTransitionUniforms(phase) {
+	const descendStop = 0.9;
+	const rotateStart = 0.6;
+
+	let uniforms = {};
+
+	if (phase < descendStop) {
+		let frac = phase / descendStop;
+		uniforms.planet_pano_mix = frac;
+	} else {
+		uniforms.planet_pano_mix = 1;
+	}
+
+	if (phase < rotateStart) {
+		uniforms.rotation = [0, 0];
+	} else {
+		let frac = (phase-rotateStart)/(1-rotateStart);
+		frac = frac*frac;
+		uniforms.rotation = [0, frac*90*RAD];
+	}
+
+	return uniforms;
 }
 
 let style = document.createElement("style");
