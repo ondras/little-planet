@@ -179,7 +179,7 @@ export class LittlePlanet extends HTMLElement {
 	}
 
 	#onPointerDown(e) {
-		if (this.inert) { return; }
+		if (this.inert || !this.#image) { return; }
 
 		if (this.#mode == "planet") { return this.#transition(); }
 
@@ -191,7 +191,7 @@ export class LittlePlanet extends HTMLElement {
 	}
 
 	#onPointerUp(e) {
-		if (this.inert) { return; }
+		if (this.inert || !this.#image) { return; }
 
 		if (this.#pointers.length == 1) {
 			this.releasePointerCapture(e.pointerId);
@@ -200,7 +200,7 @@ export class LittlePlanet extends HTMLElement {
 	}
 
 	#onPointerMove(e) {
-		if (this.inert) { return; }
+		if (this.inert || !this.#image) { return; }
 
 		const pointers = this.#pointers;
 		const anglePerPixel = this.#camera.hfov / this.clientWidth;
@@ -232,7 +232,7 @@ export class LittlePlanet extends HTMLElement {
 	}
 
 	#onWheel(e) {
-		if (this.#mode == "planet" || this.inert) { return; }
+		if (this.#mode == "planet" || this.inert || !this.#image) { return; }
 
 		e.preventDefault();
 		let fovDelta = e.deltaY * 0.05;
