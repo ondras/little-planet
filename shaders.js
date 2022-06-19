@@ -11,6 +11,7 @@ void main(void) {
 export const fs = `#version 300 es
 #define PI 3.1415926538
 precision mediump float;
+const float MAX_VFOV = 170. * (PI/180.);
 
 uniform sampler2D texLeft, texRight;
 uniform vec2 port;
@@ -108,6 +109,7 @@ vec2 scale_planet(float fov) {
 
 vec2 scale_pano(float hfov) {
 	vec2 fov = hfov * vec2(1, port.y/port.x);
+	fov.y = min(fov.y, MAX_VFOV);
 	return tan(fov * 0.5);
 }
 
