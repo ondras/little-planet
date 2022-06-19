@@ -20,6 +20,7 @@ This project is a [Custom HTML Element](https://developer.mozilla.org/en-US/docs
   - [Showcase of most features](https://ondras.github.io/little-planet/showcase.html)
   - [Little Planet Creator](https://ondras.github.io/little-planet/little-planet.html)
   - [Sizes & Resolutions](https://ondras.github.io/little-planet/sizes-resolutions.html)
+  - [Fullscreen viewer](https://ondras.github.io/little-planet/fullscreen.html)
 
 ## Miscellaneous
 

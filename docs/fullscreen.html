@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+
+	{% include_relative _head.html title="Fullscreen viewer" %}
+
+	<body>
+
+		{% include_relative _header.html h1="Fullscreen viewer" %}
+
+		<p>
+			Pick an image (or drag it onto this page):
+			<input type="file" accept="image/*" />
+		</p>
+		<p>
+			<button>Go Fullscreen</button>
+		</p>
+		<little-planet></little-planet>
+
+<style>
+html { height: 100%; }
+body { margin: 0; height: 100%; overflow: hidden; }
+little-planet { flex: auto; overflow: hidden; }
+</style>
+
+<script type="module">
+let scene = document.querySelector("little-planet");
+function sync() {
+	scene.width = scene.clientWidth * devicePixelRatio;
+	scene.height = scene.clientHeight * devicePixelRatio;
+}
+
+scene.addEventListener("fullscreenchange", sync);
+window.addEventListener("resize", sync);
+
+document.querySelector("button").addEventListener("click", _ => {
+	document.querySelector("little-planet").requestFullscreen();
+});
+
+document.querySelector("[type=file]").addEventListener("change", e => {
+	scene.src = URL.createObjectURL(e.target.files[0]);
+});
+
+document.body.addEventListener("dragover", e => e.preventDefault());
+
+document.body.addEventListener("drop", e => {
+	e.preventDefault();
+	scene.src = URL.createObjectURL(e.dataTransfer.files[0]);
+});
+
+sync();
+
+</script>
+
+
+</body>
+</html>
+
