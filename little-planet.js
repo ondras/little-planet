@@ -8,6 +8,8 @@ const HFOV_RANGE = [50, 120];
 const LAT_RANGE = [-90, 90];
 const DEFAULT_PANO_HFOV = (HFOV_RANGE[0]+HFOV_RANGE[1])/2;
 const DEFAULT_PLANET_FOV = 240;
+const DBLCLICK = 300;
+const TRANSITION_DURATION = 2000;
 
 const STYLE = `
 little-planet {
@@ -33,6 +35,7 @@ export class LittlePlanet extends HTMLElement {
 	}
 	#pointers = [];
 	#originalCamera = null;
+	#lastFirstDown = 0;
 	#mode = "planet";
 
 	constructor() {
@@ -118,7 +121,17 @@ export class LittlePlanet extends HTMLElement {
 	#onPointerDown(e) {
 		if (this.inert || !this.#image) { return; }
 
-		if (this.#mode == "planet") { return this.#transition(); }
+		if (this.#mode == "planet") { return this.#transition("pano"); }
+
+		if (this.#pointers.length == 0) {
+			let last = this.#lastFirstDown;
+			let ts = performance.now();
+			if (ts-last < DBLCLICK) {
+				return this.#transition("planet");
+			} else {
+				this.#lastFirstDown = ts;
+			}
+		}
 
 		this.#pointers.push(e);
 		if (this.#pointers.length == 1) {
@@ -170,30 +183,31 @@ export class LittlePlanet extends HTMLElement {
 
 	#onWheel(e) {
 		if (this.#mode == "planet" || this.inert || !this.#image) { return; }
-		console.log(e.deltaY, e.deltaMode);
+//		console.log(e.deltaY, e.deltaMode);
 		e.preventDefault();
 		let fovDelta = e.deltaY * 0.05;
 		this.camera = { hfov: this.#camera.hfov + fovDelta };
 	}
 
-	#transition() {
-		let oldInert = this.inert;
+	#transition(mode) {
 		this.inert = true;
 
-		const duration = 2000;
 		let startTime = performance.now();
 
 		let step = () => {
 			let time = performance.now();
-			let phase = (time-startTime) / duration;
-			let uniforms = computeTransitionUniforms(phase);
+
+			let phase = (time-startTime) / TRANSITION_DURATION;
+			phase = Math.min(phase, 1);
+
+			let uniforms = computeTransitionUniforms(mode == "planet" ? 1-phase : phase, this.#camera);
 
 			this.#render(uniforms);
 			if (phase < 1) {
 				requestAnimationFrame(step);
 			} else {
-				this.#mode = "pano";
-				this.inert = oldInert;
+				this.#mode = mode;
+				this.inert = false;
 			}
 		}
 
@@ -221,10 +235,10 @@ export class LittlePlanet extends HTMLElement {
 		let planet_pano_mix, rotation;
 		if (this.#mode == "planet") {
 			planet_pano_mix = 0;
-			rotation = [0, 0];
+			rotation = cameraToRotation(0, -90);
 		} else {
 			planet_pano_mix = 1;
-			rotation = [this.#camera.lon*RAD, (90+this.#camera.lat)*RAD];
+			rotation = cameraToRotation(this.#camera.lon, this.#camera.lat);
 		}
 
 		let uniforms = {
@@ -303,7 +317,7 @@ function createContext(canvas) {
 	return { gl, program };
 }
 
-function computeTransitionUniforms(phase) {
+function computeTransitionUniforms(phase, panoCamera) {
 	const descendStop = 0.9;
 	const rotateStart = 0.6;
 
@@ -317,14 +331,19 @@ function computeTransitionUniforms(phase) {
 	}
 
 	if (phase < rotateStart) {
-		uniforms.rotation = [0, 0];
+		uniforms.rotation = cameraToRotation(panoCamera.lon, -90);
 	} else {
 		let frac = (phase-rotateStart)/(1-rotateStart);
 		frac = frac*frac;
-		uniforms.rotation = [0, frac*90*RAD];
+		let lat = -90 + frac * (panoCamera.lat + 90)
+		uniforms.rotation = cameraToRotation(panoCamera.lon, lat);
 	}
 
 	return uniforms;
+}
+
+function cameraToRotation(lon, lat) {
+	return [lon*RAD, (90+lat)*RAD];
 }
 
 let style = document.createElement("style");
