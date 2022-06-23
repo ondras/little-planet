@@ -1,2 +1,5 @@
 firefox, win, dpr 1.5, mouse: +-102
 edge, win, dpr 1.5, mouse: +- 150
+
+firefox, linux, dpr 1, mouse: +-114
+chrome, linux, dpr 1, mouse: +- 53
