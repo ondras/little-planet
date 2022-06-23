@@ -11,7 +11,7 @@ This project is a [Custom HTML Element](https://developer.mozilla.org/en-US/docs
   - No geometry, just one quad
     - uses the *impostor sphere* technique, ray-tracing the scene in fragment shader
   - Two views: top-level planet-like (not interactive) and a regular interactive inside-the-sphere
-  - Smooth transition
+  - Smooth transition (both ways: double-click/tap to zoom back)
   - Controllable via mouse or touch, mobile friendly
   - Needs only one (equirectangular) image, size up to 8192×4096 pixels
 
@@ -27,3 +27,8 @@ This project is a [Custom HTML Element](https://developer.mozilla.org/en-US/docs
   - [Author](https://ondras.zarovi.cz/)
   - [Sponsor me!](https://github.com/sponsors/ondras)
   - [NPM package](https://www.npmjs.com/package/little-planet)
+
+## Changelog
+
+  - 0.2.x: reverse transition support
+  - 0.1.x: initial release
