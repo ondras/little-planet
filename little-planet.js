@@ -44,8 +44,10 @@ export class LittlePlanet extends HTMLElement {
 		const canvas = document.createElement("canvas");
 		const { gl, program } = createContext(canvas);
 
-		this.program = program;
+		if (!gl) { this.textContent = "WebGL 2 not supported 😢"; }
+
 		this.gl = gl;
+		this.program = program;
 
 		this.addEventListener("pointerdown", e => this.#onPointerDown(e));
 		this.addEventListener("pointerup", e => this.#onPointerUp(e));
@@ -301,8 +303,11 @@ function loadImage(src) {
 
 function createContext(canvas) {
 	const gl = canvas.getContext("webgl2", {preserveDrawingBuffer: true}); // to allow canvas save-as
+	let program = null;
 
-	let program = new Program(gl, {vs, fs});
+	if (!gl) { return { gl, program }; }
+
+	program = new Program(gl, {vs, fs});
 	program.use();
 
 	Object.values(program.attribute).forEach(a => a.enable());
