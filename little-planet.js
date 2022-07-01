@@ -108,11 +108,14 @@ export class LittlePlanet extends HTMLElement {
 	}
 
 	async #load(src) {
+		const { gl } = this;
+
 		this.#image = null;
+		gl.clear(gl.COLOR_BUFFER_BIT);
 
 		try {
 			this.#image = await loadImage(src);
-			createTextures(this.#image, this.gl);
+			createTextures(this.#image, gl);
 			this.#render();
 			this.dispatchEvent(new CustomEvent("load"));
 		} catch (e) {
