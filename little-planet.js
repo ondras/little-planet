@@ -11,17 +11,19 @@ const DEFAULT_PLANET_FOV = 240;
 const DBLCLICK = 300;
 const TRANSITION_DURATION = 2000;
 
-const STYLE = `
-little-planet {
+const HTML= `
+<style>
+:host {
 	display: inline-block;
 	touch-action: none;
 }
 
-little-planet canvas {
+canvas {
 	display: block;
 	width: 100%;
 	height: 100%;
 }
+</style>
 `;
 
 
@@ -40,8 +42,12 @@ export class LittlePlanet extends HTMLElement {
 
 	constructor() {
 		super();
+		let shadow = this.attachShadow({mode:"open"});
+		shadow.innerHTML = HTML
 
 		const canvas = document.createElement("canvas");
+		shadow.append(canvas);
+
 		const { gl, program } = createContext(canvas);
 
 		if (!gl) { this.textContent = "WebGL 2 not supported 😢"; }
@@ -57,8 +63,6 @@ export class LittlePlanet extends HTMLElement {
 
 	connectedCallback() {
 		const { canvas } = this;
-
-		this.append(canvas);
 
 		let options = { // init from attributes
 			width: Number(this.getAttribute("width")) || canvas.width,
@@ -353,9 +357,5 @@ function computeTransitionUniforms(phase, panoCamera) {
 function cameraToRotation(lon, lat) {
 	return [lon*RAD, (90+lat)*RAD];
 }
-
-let style = document.createElement("style");
-style.append(STYLE);
-document.head.append(style);
 
 customElements.define("little-planet", LittlePlanet);
