@@ -77,8 +77,8 @@ export class LittlePlanet extends HTMLElement {
 	get canvas() { return this.gl.canvas; }
 	get planetSize() { return this.#image ? 2*this.#image.naturalHeight : null; }
 
-	get inert() { return this.hasAttribute("inert"); }
-	set inert(inert) { this.toggleAttribute("inert", inert); }
+	get static() { return this.hasAttribute("static"); }
+	set static(s) { s ? this.setAttribute("static", "") : this.removeAttribute("static"); }
 
 	get camera() { return this.#camera; }
 	set camera(camera) {
@@ -128,7 +128,7 @@ export class LittlePlanet extends HTMLElement {
 	}
 
 	#onPointerDown(e) {
-		if (this.inert || !this.#image) { return; }
+		if (this.static || !this.#image) { return; }
 
 		if (this.#mode == "planet") { return this.#transition("pano"); }
 
@@ -150,7 +150,7 @@ export class LittlePlanet extends HTMLElement {
 	}
 
 	#onPointerUp(e) {
-		if (this.inert || !this.#image) { return; }
+		if (this.static || !this.#image) { return; }
 
 		if (this.#pointers.length == 1) {
 			this.releasePointerCapture(e.pointerId);
@@ -159,7 +159,7 @@ export class LittlePlanet extends HTMLElement {
 	}
 
 	#onPointerMove(e) {
-		if (this.inert || !this.#image) { return; }
+		if (this.static || !this.#image) { return; }
 
 		const pointers = this.#pointers;
 		const anglePerPixel = this.#camera.hfov / this.clientWidth;
@@ -191,7 +191,7 @@ export class LittlePlanet extends HTMLElement {
 	}
 
 	#onWheel(e) {
-		if (this.#mode == "planet" || this.inert || !this.#image) { return; }
+		if (this.#mode == "planet" || this.static || !this.#image) { return; }
 //		console.log(e.deltaY, e.deltaMode);
 		e.preventDefault();
 		let fovDelta = e.deltaY * 0.05;
@@ -199,7 +199,7 @@ export class LittlePlanet extends HTMLElement {
 	}
 
 	#transition(mode) {
-		this.inert = true;
+		this.static = true;
 
 		let startTime = performance.now();
 
@@ -216,7 +216,7 @@ export class LittlePlanet extends HTMLElement {
 				requestAnimationFrame(step);
 			} else {
 				this.#mode = mode;
-				this.inert = false;
+				this.static = false;
 			}
 		}
 
