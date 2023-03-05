@@ -4,9 +4,9 @@ import { vs, fs } from "./shaders.js";
 
 const RAD = Math.PI / 180;
 const QUAD = new Float32Array([1, -1, -1, -1, 1, 1, -1, 1]);
-const HFOV_RANGE = [50, 120];
+const FOV_RANGE = [50, 120];
 const LAT_RANGE = [-90, 90];
-const DEFAULT_PANO_HFOV = (HFOV_RANGE[0]+HFOV_RANGE[1])/2;
+const DEFAULT_PANO_FOV = (FOV_RANGE[0]+FOV_RANGE[1])/2;
 const DEFAULT_PLANET_FOV = 240;
 const DBLCLICK = 300;
 const TRANSITION_DURATION = 2000;
@@ -33,7 +33,7 @@ export class LittlePlanet extends HTMLElement {
 	#camera = {
 		lat: 0,
 		lon: 0,
-		hfov: DEFAULT_PANO_HFOV
+		fov: DEFAULT_PANO_FOV
 	}
 	#pointers = [];
 	#originalCamera = null;
@@ -83,8 +83,8 @@ export class LittlePlanet extends HTMLElement {
 	get camera() { return this.#camera; }
 	set camera(camera) {
 		Object.assign(this.#camera, camera);
-		this.#camera.hfov = Math.min(Math.max(this.#camera.hfov, HFOV_RANGE[0]), HFOV_RANGE[1]);
-		this.#camera.lat = Math.min(Math.max(this.#camera.lat, LAT_RANGE[0]), LAT_RANGE[1]);
+		this.#camera.fov = constrain(this.#camera.fov, FOV_RANGE);
+		this.#camera.lat = constrain(this.#camera.lat, LAT_RANGE);
 		this.#changed();
 	}
 
@@ -162,7 +162,7 @@ export class LittlePlanet extends HTMLElement {
 		if (this.static || !this.#image) { return; }
 
 		const pointers = this.#pointers;
-		const anglePerPixel = this.#camera.hfov / this.clientWidth;
+		const anglePerPixel = this.#camera.fov / Math.max(this.clientWidth, this.clientHeight);
 
 		switch (pointers.length) {
 			case 2: // zoom/fov
@@ -172,7 +172,7 @@ export class LittlePlanet extends HTMLElement {
 				});
 				let newDist = pointerDistance(pointers[0], pointers[1]);
 				let diff = newDist - oldDist;
-				this.camera = { hfov: this.#camera.hfov - diff * anglePerPixel };
+				this.camera = { fov: this.#camera.fov - diff * anglePerPixel };
 			break;
 
 			case 1: // pan
@@ -195,7 +195,7 @@ export class LittlePlanet extends HTMLElement {
 //		console.log(e.deltaY, e.deltaMode);
 		e.preventDefault();
 		let fovDelta = e.deltaY * 0.05;
-		this.camera = { hfov: this.#camera.hfov + fovDelta };
+		this.camera = { fov: this.#camera.fov + fovDelta };
 	}
 
 	#transition(mode) {
@@ -253,7 +253,7 @@ export class LittlePlanet extends HTMLElement {
 		let uniforms = {
 			planet_pano_mix,
 			rotation,
-			pano_hfov: this.#camera.hfov * RAD,
+			pano_fov: this.#camera.fov * RAD,
 			planet_fov: DEFAULT_PLANET_FOV * RAD
 		}
 		Object.assign(uniforms, forceUniforms);
@@ -356,6 +356,10 @@ function computeTransitionUniforms(phase, panoCamera) {
 
 function cameraToRotation(lon, lat) {
 	return [lon*RAD, (90+lat)*RAD];
+}
+
+function constrain(value, limits) {
+	return Math.min(Math.max(value, limits[0]), limits[1]);
 }
 
 customElements.define("little-planet", LittlePlanet);

@@ -11,11 +11,10 @@ void main(void) {
 export const fs = `#version 300 es
 #define PI 3.1415926538
 precision mediump float;
-const float MAX_VFOV = 170. * (PI/180.);
 
 uniform sampler2D texLeft, texRight;
 uniform vec2 port;
-uniform float pano_hfov;
+uniform float pano_fov;
 uniform float planet_fov;
 uniform float planet_pano_mix;
 uniform vec2 rotation;
@@ -108,14 +107,18 @@ vec2 scale_planet(float fov) {
 }
 
 vec2 scale_pano(float hfov) {
-	vec2 fov = hfov * vec2(1, port.y/port.x);
-	fov.y = min(fov.y, MAX_VFOV);
+	vec2 fov = hfov * vec2(1, 1);
+	if (port.x > port.y) {
+		fov.y *= port.y/port.x;
+	} else {
+		fov.x *= port.x/port.y;
+	}
 	return tan(fov * 0.5);
 }
 
 vec3 unproject_hybrid(vec2 ndc) {
 	vec2 s_planet = 2.*scale_planet(planet_fov);
-	vec2 s_pano = scale_pano(pano_hfov);
+	vec2 s_pano = scale_pano(pano_fov);
 	vec2 scale = mix(s_planet, s_pano, planet_pano_mix);
 	ndc *= scale;
 
@@ -131,7 +134,7 @@ vec3 unproject_hybrid(vec2 ndc) {
 
 vec3 unproject_outside(vec2 ndc) {
 	ndc *= scale_planet(planet_fov);
-//	ndc *= scale_pano(pano_hfov / 2.); uncomment to test pano-mode of the stereographical projection
+//	ndc *= scale_pano(pano_fov / 2.); uncomment to test pano-mode of the stereographical projection
 
 	vec2 polar = cartesian_to_polar(ndc);
 	vec3 inverted = stereographic_inverse(polar);
@@ -143,7 +146,7 @@ vec3 unproject_outside(vec2 ndc) {
 }
 
 vec3 unproject_inside(vec2 ndc) {
-	ndc *= scale_pano(pano_hfov);
+	ndc *= scale_pano(pano_fov);
 
 	// cartesian version:
 	vec3 inverted = gnomonic_inverse_cartesian(ndc);
