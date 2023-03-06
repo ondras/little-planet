@@ -30,5 +30,8 @@ This project is a [Custom HTML Element](https://developer.mozilla.org/en-US/docs
 
 ## Changelog
 
+  - 0.5.x: FOV for the longer side
+  - 0.4.x: `static` instead of `inert`
+  - 0.3.x: shadow DOM
   - 0.2.x: reverse transition support
   - 0.1.x: initial release
