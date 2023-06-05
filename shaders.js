@@ -10,7 +10,11 @@ void main(void) {
 
 export const fs = `#version 300 es
 #define PI 3.1415926538
-precision mediump float;
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+  precision highp float;
+#else
+  precision mediump float;
+#endif
 
 uniform sampler2D texLeft, texRight;
 uniform vec2 port;
