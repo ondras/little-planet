@@ -10,6 +10,7 @@ const DEFAULT_PANO_FOV = (FOV_RANGE[0]+FOV_RANGE[1])/2;
 const DEFAULT_PLANET_FOV = 240;
 const DBLCLICK = 300;
 const TRANSITION_DURATION = 2000;
+const DEFAULT_CAMERA = { lat: 0, lon: 0, fov: DEFAULT_PANO_FOV };
 
 const HTML= `
 <style>
@@ -30,15 +31,11 @@ canvas {
 export class LittlePlanet extends HTMLElement {
 	#dirty = false;
 	#image = null;
-	#camera = {
-		lat: 0,
-		lon: 0,
-		fov: DEFAULT_PANO_FOV
-	}
+	#camera = DEFAULT_CAMERA;
+	#mode = "planet";
 	#pointers = [];
 	#originalCamera = null;
 	#lastFirstDown = 0;
-	#mode = "planet";
 
 	constructor() {
 		super();
@@ -120,6 +117,8 @@ export class LittlePlanet extends HTMLElement {
 		try {
 			this.#image = await loadImage(src);
 			createTextures(this.#image, gl);
+			this.#camera = DEFAULT_CAMERA;
+			this.#mode = "planet";
 			this.#render();
 			this.dispatchEvent(new CustomEvent("load"));
 		} catch (e) {
