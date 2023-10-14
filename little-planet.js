@@ -64,7 +64,6 @@ export class LittlePlanet extends HTMLElement {
 			width: Number(this.getAttribute("width")) || canvas.width,
 			height: Number(this.getAttribute("height")) || canvas.height
 		}
-		if (this.hasAttribute("mode")) { options.mode = this.getAttribute("mode"); }
 		if (this.hasAttribute("src")) { options.src = this.getAttribute("src"); }
 
 		Object.assign(this, options);
@@ -117,7 +116,7 @@ export class LittlePlanet extends HTMLElement {
 			this.#image = await loadImage(src);
 			createTextures(this.#image, gl);
 			this.#camera = { lat: 0, lon: 0, fov: DEFAULT_PANO_FOV };
-			this.#mode = "planet";
+			this.#mode = this.getAttribute("mode") || "planet";
 			this.#render();
 			this.dispatchEvent(new CustomEvent("load"));
 		} catch (e) {
