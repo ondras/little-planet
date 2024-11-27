@@ -115,7 +115,7 @@ export class LittlePlanet extends HTMLElement {
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
 		try {
-			states.remove("error");
+			states.delete("error");
 			states.add("loading");
 
 			this.#image = await loadImage(src);
@@ -124,7 +124,7 @@ export class LittlePlanet extends HTMLElement {
 			this.#mode = this.getAttribute("mode") || "planet";
 			this.#render();
 
-			states.remove("loading");
+			states.delete("loading");
 			this.dispatchEvent(new CustomEvent("load"));
 		} catch (e) {
 			states.add("error");
