@@ -35,11 +35,12 @@ export class LittlePlanet extends HTMLElement {
 	#pointers = [];
 	#originalCamera = null;
 	#lastFirstDown = 0;
+	#internals = this.attachInternals();
 
 	constructor() {
 		super();
 		let shadow = this.attachShadow({mode:"open"});
-		shadow.innerHTML = HTML
+		shadow.innerHTML = HTML;
 
 		const canvas = document.createElement("canvas");
 		shadow.append(canvas);
@@ -108,18 +109,25 @@ export class LittlePlanet extends HTMLElement {
 
 	async #load(src) {
 		const { gl } = this;
+		const { states } = this.#internals;
 
 		this.#image = null;
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
 		try {
+			states.remove("error");
+			states.add("loading");
+
 			this.#image = await loadImage(src);
 			createTextures(this.#image, gl);
 			this.#camera = { lat: 0, lon: 0, fov: DEFAULT_PANO_FOV };
 			this.#mode = this.getAttribute("mode") || "planet";
 			this.#render();
+
+			states.remove("loading");
 			this.dispatchEvent(new CustomEvent("load"));
 		} catch (e) {
+			states.add("error");
 			this.dispatchEvent(new CustomEvent("error", {detail:e}));
 		}
 	}
@@ -224,6 +232,7 @@ export class LittlePlanet extends HTMLElement {
 		if (this.#dirty || !this.#image) { return; }
 		this.#dirty = true;
 		requestAnimationFrame(() => this.#render());
+		this.dispatchEvent(new CustomEvent("change"));
 	}
 
 	#syncSize() {
