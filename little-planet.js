@@ -222,6 +222,7 @@ export class LittlePlanet extends HTMLElement {
 			} else {
 				this.#mode = mode;
 				this.static = false;
+				this.#changed(); // to dispatch event
 			}
 		}
 
