@@ -18,11 +18,11 @@ jobs:
       - name: esbuild
         run: mkdir -p dist; esbuild --format=esm --bundle little-planet.js > dist/little-planet.js
 
-      - uses: JS-DevTools/npm-publish@v1
+      - uses: JS-DevTools/npm-publish@v3
         id: publish
         with:
           token: ${{ secrets.NPM_TOKEN }}
 
-      - if: steps.publish.outputs.type != 'none'
+      - if: ${{ steps.publish.outputs.type }}
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
