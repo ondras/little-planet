@@ -242,7 +242,10 @@ export class LittlePlanet extends HTMLElement {
 		let port = [canvas.width, canvas.height];
 		gl.viewport(0, 0, ...port);
 		program.uniform.port.set(port);
-		this.#changed();
+
+		// Ideally we would do "this.#changed()", but that would delay the re-render until rAF.
+		// And the canvas is blank now (due to resizing) so we need to draw ASAP.
+		this.#image && this.#render();
 	}
 
 	#render(forceUniforms = {}) {
