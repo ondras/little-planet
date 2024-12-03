@@ -254,7 +254,7 @@ export class LittlePlanet extends HTMLElement {
 		let planet_pano_mix, rotation;
 		if (this.#mode == "planet") {
 			planet_pano_mix = 0;
-			rotation = cameraToRotation(0, -90);
+			rotation = cameraToRotation(this.#camera.lon, -90);
 		} else {
 			planet_pano_mix = 1;
 			rotation = cameraToRotation(this.#camera.lon, this.#camera.lat);
