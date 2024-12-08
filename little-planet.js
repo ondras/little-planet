@@ -230,9 +230,10 @@ export class LittlePlanet extends HTMLElement {
 	}
 
 	#changed() {
-		if (this.#dirty || !this.#image) { return; }
-		this.#dirty = true;
-		requestAnimationFrame(() => this.#render());
+		if (!this.#dirty && this.#image) {
+			this.#dirty = true;
+			requestAnimationFrame(() => this.#render());
+		}
 		this.dispatchEvent(new CustomEvent("change"));
 	}
 
